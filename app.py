@@ -55,6 +55,13 @@ def upload_test2():
         # f.save(upload_path + secure_filename(f.filename))
         # return 'file uploaded successfully'
 
+def upload_test3():
+    if request.method == 'POST':
+        upload_path = os.path.join('static', 'images/')
+        f = request.files['file']
+        f.save(upload_path + secure_filename(f.filename))
+        return 'file uploaded successfully'
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='8989')
