@@ -12,15 +12,6 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/info')
-def info():
-    return render_template('info.html')
-
-@app.route('/json_test')
-def json_test():
-    data = {'name':'jihun', 'age':30}
-    return jsonify(data)
-
 @app.route('/success/<name>')
 def success(name):
    return 'welcome %s' % name
@@ -40,7 +31,7 @@ def test():
         data = request.get_json()
         return jsonify(data)
 
-@app.route('/upload')
+@app.route('/upload', methods=['GET'])
 def load_file():
    return render_template('upload.html')
 
