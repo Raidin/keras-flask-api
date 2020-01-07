@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, url_for, jsonify, request, redirect
 from werkzeug import secure_filename
 
@@ -45,9 +47,12 @@ def load_file():
 @app.route('/upload_test', methods=['POST'])
 def upload_test():
     if request.method == 'POST':
+        upload_path = os.path.join('static', 'images/')
         f = request.files['file']
-        f.save('./images/' + secure_filename(f.filename))
-        return 'file uploaded successfully'
+        f.save(upload_path + secure_filename(f.filename))
+        img_path = os.path.join(upload_path, f.filename)
+        print('img_path :: ', img_path)
+        return render_template('draw_image.html', user_image=img_path)
 
 
 if __name__ == '__main__':
