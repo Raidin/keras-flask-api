@@ -118,9 +118,7 @@ def predict_json():
     if request.method == 'POST':
         data = request.get_json()
         f = base64.b64decode(data['image_data'])
-
-        file = f.read()
-        img = np.array(Image.open(io.BytesIO(file)))
+        img = np.array(Image.open(io.BytesIO(f)))
 
         bbox = predict(img)
 
