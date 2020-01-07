@@ -55,6 +55,7 @@ def upload_test2():
         # f.save(upload_path + secure_filename(f.filename))
         # return 'file uploaded successfully'
 
+@app.route('/upload_test_3', methods=['POST'])
 def upload_test3():
     if request.method == 'POST':
         upload_path = os.path.join('static', 'images/')
