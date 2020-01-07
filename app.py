@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import io
+import base64
 
 from flask import Flask, render_template, url_for, jsonify, request, redirect
 from werkzeug.utils import secure_filename
@@ -47,11 +48,10 @@ def upload_test():
 def upload_test2():
     if request.method == 'POST':
         data = request.get_json()
-        return jsonify(data)
-        # upload_path = os.path.join('static', 'images/')
-        # f = request.files['file']
-        # f.save(upload_path + secure_filename(f.filename))
-        # return 'file uploaded successfully'
+        f = base64.b64decode(data['image_data'])
+        upload_path = os.path.join('static', 'images/')
+        f.save(upload_path + secure_filename(f.filename))
+        return render_template('draw_image.html', user_image=img_path)
 
 @app.route('/upload_test_3', methods=['POST'])
 def upload_test3():
@@ -116,8 +116,10 @@ def predict_img():
 @app.route('/predict_json', methods=['POST'])
 def predict_json():
     if request.method == 'POST':
-        load_file = request.files['image']
-        file = load_file.read()
+        data = request.get_json()
+        f = base64.b64decode(data['image_data'])
+
+        file = f.read()
         img = np.array(Image.open(io.BytesIO(file)))
 
         bbox = predict(img)
