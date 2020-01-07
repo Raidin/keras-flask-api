@@ -54,6 +54,14 @@ def upload_test():
         print('img_path :: ', img_path)
         return render_template('draw_image.html', user_image=img_path)
 
+@app.route('/upload_test_2', methods=['POST'])
+def upload_test2():
+    if request.method == 'POST':
+        upload_path = os.path.join('static', 'images/')
+        f = request.files['file']
+        f.save(upload_path + secure_filename(f.filename))
+        return 'file uploaded successfully'
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='8989')
