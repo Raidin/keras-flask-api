@@ -1,13 +1,17 @@
+import matplotlib.pyplot as plt
+import numpy as np
 import os
+import io
 
 from flask import Flask, render_template, url_for, jsonify, request, redirect
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
+from keras.models import model_from_json
+from PIL import Image
+from module import *
 
-# Flask 객체를 App 에 할당
 app = Flask(__name__)
 
-# app 객체를 이용해 라우팅 경로 설정 -> 실행 할 함수
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -24,12 +28,6 @@ def login():
     else:
         user = request.args.get('myName')
         return redirect(url_for('success', name=user))
-
-@app.route('/test', methods=['POST'])
-def test():
-    if request.method == 'POST':
-        data = request.get_json()
-        return jsonify(data)
 
 @app.route('/upload', methods=['GET'])
 def load_file():
@@ -63,6 +61,77 @@ def upload_test3():
         f.save(upload_path + secure_filename(f.filename))
         return 'file uploaded successfully'
 
+#### Inference Practice Using Keras ####
+model = None
+
+def load_model():
+    global model
+    MODEL_DIR = os.path.join('static', 'model/')
+    model_struct = os.path.join(MODEL_DIR, 'network_model.json')
+    with open(model_struct, 'r') as f:
+        model = model_from_json(f.read())
+
+    model_weight = os.path.join(MODEL_DIR, 'trained_weight.h5')
+    model.load_weights(model_weight)
+
+def predict(img):
+    rois = SelectiveSearch(img)
+    print('ROI Shape ::', rois.shape)
+
+    # Predict object
+    print(model)
+    predict_bbox = PredictObject(model, rois, img)
+    print('Predict BBox Shape ::', predict_bbox.shape)
+
+    # Apply Bounding Box Regression
+    # refine_bbox = BoundingBoxRegression(reg_model, predict_bbox, img)
+    # print('Refine BBox Shape ::', refine_bbox.shape)
+
+    # Apply Non Maximum Suppression
+    nms_bbox = NonMaximumSuppression(predict_bbox)
+    print('Before regions ::', predict_bbox.shape)
+    print('NMS regions ::', nms_bbox.shape)
+
+    return nms_bbox
+
+@app.route('/sample_test', methods=['GET'])
+def sample_test():
+   return render_template('sample_test.html')
+
+@app.route('/predict_img', methods=['POST'])
+def predict_img():
+    if request.method == 'POST':
+        load_file = request.files['image']
+        file = load_file.read()
+        img = np.array(Image.open(io.BytesIO(file)))
+
+        bbox = predict(img)
+
+        DrawBoxes(img, bbox, title='Detection Results', color='red', linestyle="-")
+        save_path = os.path.join('static', 'images', '{}_result.png'.format(load_file.filename))
+        plt.savefig(save_path)
+
+        return render_template('draw_image.html', user_image=save_path)
+
+@app.route('/predict_json', methods=['POST'])
+def predict_json():
+    if request.method == 'POST':
+        load_file = request.files['image']
+        file = load_file.read()
+        img = np.array(Image.open(io.BytesIO(file)))
+
+        bbox = predict(img)
+
+        results = []
+        for i in bbox:
+            sub = dict()
+            sub['class_id'] = 0
+            sub['bbox'] = i[:4].tolist()
+            results.append(sub)
+
+        return jsonify(results)
+
 
 if __name__ == '__main__':
+    load_model()
     app.run(host='0.0.0.0', port='8989')
