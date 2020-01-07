@@ -48,10 +48,12 @@ def upload_test():
 @app.route('/upload_test_2', methods=['POST'])
 def upload_test2():
     if request.method == 'POST':
-        upload_path = os.path.join('static', 'images/')
-        f = request.files['file']
-        f.save(upload_path + secure_filename(f.filename))
-        return 'file uploaded successfully'
+        data = request.get_json()
+        return jsonify(data)
+        # upload_path = os.path.join('static', 'images/')
+        # f = request.files['file']
+        # f.save(upload_path + secure_filename(f.filename))
+        # return 'file uploaded successfully'
 
 
 if __name__ == '__main__':
