@@ -110,25 +110,11 @@ def predict_img():
 
         bbox = predict(img)
 
-        results = dict()
-        obj_data = []
-        results['objectCount'] = bbox.shape[0]
-        for i in bbox:
-            sub = dict()
-            sub['class_id'] = 0
-            sub['p1_x'] = i[0]
-            sub['p1_x'] = i[1]
-            sub['p2_x'] = i[2]
-            sub['p2_x'] = i[3]
-            obj_data.append(sub)
-        results['objectData'] = obj_data
-
         DrawBoxes(img, bbox, title='Detection Results', color='red', linestyle="-")
         save_path = os.path.join('static', 'images', '{}_result.png'.format(load_file.filename))
         plt.savefig(save_path)
 
-        return results
-        # return render_template('draw_image.html', user_image=save_path)
+        return render_template('draw_image.html', user_image=save_path)
 
 @app.route('/predict_json', methods=['POST'])
 def predict_json():
