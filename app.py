@@ -125,12 +125,18 @@ def predict_json():
 
         bbox = predict(img)
 
-        results = []
+        results = dict()
+        obj_data = []
+        results['objectCount'] = bbox.shape[0]
         for i in bbox:
             sub = dict()
             sub['class_id'] = 0
-            sub['bbox'] = i[:4].tolist()
-            results.append(sub)
+            sub['p1_x'] = i[0]
+            sub['p1_x'] = i[1]
+            sub['p2_x'] = i[2]
+            sub['p2_x'] = i[3]
+            obj_data.append(sub)
+        results['objectData'] = obj_data
 
         return jsonify(results)
 
