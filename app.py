@@ -11,6 +11,9 @@ from keras.models import model_from_json
 from PIL import Image
 from module import *
 
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
 app = Flask(__name__)
 
 @app.route('/')
