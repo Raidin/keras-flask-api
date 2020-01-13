@@ -103,8 +103,10 @@ def sample_test():
 
 @app.route('/predict_img', methods=['POST'])
 def predict_img():
+    print('1111111111111111111111111111111111111111111111111111')
     if request.method == 'POST':
         load_file = request.files['image']
+        print('CHECK!!!!!!!!!!!!!', load_file)
         file = load_file.read()
         img = np.array(Image.open(io.BytesIO(file)))
 
@@ -120,6 +122,7 @@ def predict_img():
 def predict_json():
     if request.method == 'POST':
         data = request.get_json()
+
         f = base64.b64decode(data['image_data'])
         img = np.array(Image.open(io.BytesIO(f)))
 
@@ -143,4 +146,4 @@ def predict_json():
 
 if __name__ == '__main__':
     load_model()
-    app.run(host='0.0.0.0', port='8989')
+    app.run(host='0.0.0.0', port='8989', debug=True)
