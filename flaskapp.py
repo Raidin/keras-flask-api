@@ -99,14 +99,12 @@ def predict(img):
 
 @app.route('/sample_test', methods=['GET'])
 def sample_test():
-   return render_template('sample_test.html')
+    return render_template('sample_test.html')
 
 @app.route('/predict_img', methods=['POST'])
 def predict_img():
-    print('1111111111111111111111111111111111111111111111111111')
     if request.method == 'POST':
         load_file = request.files['image']
-        print('CHECK!!!!!!!!!!!!!', load_file)
         file = load_file.read()
         img = np.array(Image.open(io.BytesIO(file)))
 
@@ -143,7 +141,7 @@ def predict_json():
 
         return jsonify(results)
 
+load_model()
 
 if __name__ == '__main__':
-    load_model()
     app.run(host='0.0.0.0', port='8989', debug=True)
