@@ -35,6 +35,7 @@ def Json2Image(path):
     img = Image.open(io.BytesIO(img_file))
     img.save(os.path.join(save_dir, save_file))
 
+
 if __name__ == '__main__':
     # Image2Json('./json_to_image_sample/42847.jpg')
-    Json2Image('./json_to_image_sample/json_image.json')
+    Json2Image('./json_image.json')

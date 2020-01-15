@@ -1,9 +1,0 @@
-server {
-        listen 80;
-        server_name locahost;
-        location / { try_files $uri @app; }
-        location @app {
-                include uwsgi_params;
-                uwsgi_pass unix:/home/jihunjung/pyflask/flaskapp.sock;
-        }
-}
