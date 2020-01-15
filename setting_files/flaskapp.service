@@ -3,11 +3,11 @@ Description=uWSGI instance to serve flaskapp
 After=network.target
 
 [Service]
-User=jihunjung
+User=[user name]
 Group=www-data
-WorkingDirectory=/home/jihunjung/pyflask
-Environment="PATH=/home/jihunjung/deeplearning_env/bin"
-ExecStart=/home/jihunjung/deeplearning_env/bin/uwsgi --ini uwsgi.ini
+WorkingDirectory=[path to proejct]
+Environment="PATH=[path to virtualenv]/bin"
+ExecStart=[path to virtualenv]/bin/uwsgi --ini uwsgi.ini
 
 [Install]
 WantedBy=multi-user.target
