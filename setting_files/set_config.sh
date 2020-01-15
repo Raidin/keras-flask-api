@@ -28,7 +28,6 @@ sudo cp custom_timeout.conf /etc/nginx/conf.d/
 
 sed "s/\[path_to_project\]/\/home\/$USER_NAME\/keras-flask-api/g" nginx_server.ori > nginx_detection_server
 
-
 sudo cp nginx_detection_server /etc/nginx/sites-available/
 sudo rm /etc/nginx/sites-enabled/*
 sudo ln -s /etc/nginx/sites-available/nginx_detection_server /etc/nginx/sites-enabled/nginx_detection_server
