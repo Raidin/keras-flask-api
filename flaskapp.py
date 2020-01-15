@@ -12,7 +12,7 @@ from PIL import Image
 from module import *
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 app = Flask(__name__)
 
@@ -139,4 +139,5 @@ load_model()
 print(' ========== Load Detection Model END ========== ')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8989', debug=True)
+    app.run(host='0.0.0.0', port='8989')
+    # app.run(host='0.0.0.0', port='8989', debug=True)

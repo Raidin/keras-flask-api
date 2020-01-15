@@ -2,7 +2,10 @@
 module=wsgi:app
 master=false
 
-processes=1
+processes=2
+threads=2
+enable-threads=true
+lazy-apps=true
 
 socket = flaskapp.sock
 chmod-socket=666
