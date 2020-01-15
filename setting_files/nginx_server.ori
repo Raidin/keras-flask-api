@@ -14,7 +14,7 @@ server {
 
         location @app {
             include uwsgi_params;
-            uwsgi_pass unix:[path to proejct]/[name of uwsgi unit];
+            uwsgi_pass unix:[path_to_project]/flaskapp.sock;
             proxy_connect_timeout 300;
             proxy_send_timeout 300;
             proxy_read_timeout 300;
