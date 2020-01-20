@@ -1,6 +1,7 @@
 # Flask_Practice
 Object Detection REST full API Using Keras + Flask + uWSGI + nginx 
 
+[reference](https://github.com/mtobeiyf/keras-flask-deploy-webapp)
 ---
 ### Environments
 * Ubuntu 16.04
