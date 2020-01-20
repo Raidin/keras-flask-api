@@ -105,3 +105,18 @@ def DrawBoxes(img, bboxes, title='Empty', color='magenta', linestyle="solid", ax
     ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     ax.axis('off')
     ax.set_title(title)
+
+def DrawBoxesUsingCV(img, bboxes):
+    for bbox in bboxes:
+        x1 = int(bbox[0])
+        y1 = int(bbox[1])
+        x2 = int(bbox[2])
+        y2 = int(bbox[3])
+        cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 1)
+
+        # Display Class Name
+        # label = 'alrplane'
+        # label_y = y1 - 15 if y1 - 15 > 15 else y1 + 15
+        # cv2.putText(img, label, (x1, label_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0),  1)
+
+    return img

@@ -1,8 +1,10 @@
+import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import io
-import base64
+import urllib, base64
+import re
 
 from flask import Flask, render_template, url_for, jsonify, request, redirect
 from werkzeug.utils import secure_filename
@@ -103,9 +105,16 @@ def predict_img():
 
         bbox = predict(img)
 
-        DrawBoxes(img, bbox, title='Detection Results', color='red', linestyle="-")
         save_path = os.path.join('static', 'images', '{}_result.png'.format(load_file.filename))
-        plt.savefig(save_path)
+
+        # Visualize BBox Using matplotlib.pyplot
+        # DrawBoxes(img, bbox, title='Detection Results', color='red', linestyle="-")
+        # plt.savefig(save_path)
+
+        # Visualize BBox Using opencv
+        img = DrawBoxesUsingCV(img, bbox)
+        save_path = os.path.join('static', 'images', 'obj_result.png')
+        cv2.imwrite(save_path, cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
 
         return render_template('draw_image.html', user_image=save_path)
 
@@ -113,7 +122,6 @@ def predict_img():
 def predict_json():
     if request.method == 'POST':
         data = request.get_json()
-
         f = base64.b64decode(data['image_data'])
         img = np.array(Image.open(io.BytesIO(f)))
 
@@ -133,6 +141,35 @@ def predict_json():
         results['objectData'] = obj_data
 
         return jsonify(results)
+
+@app.route('/predict_json_for_web', methods=['POST'])
+def predict_json_for_web():
+    if request.method == 'POST':
+        data = request.get_json()
+
+        image_data = re.sub('^data:image/.+;base64,', '', data)
+
+        img = np.array(Image.open(io.BytesIO(base64.b64decode(image_data))))
+
+        bbox = predict(img)
+
+        image_buffer = io.BytesIO()
+
+        # Visualize BBox Using matplotlib.pyplot
+        # DrawBoxes(img, bbox, title='Detection Results', color='red', linestyle="-")
+        # plt.savefig(buf, format='png')
+
+        # Visualize BBox Using opencv
+        img = DrawBoxesUsingCV(img, bbox)
+        re_img = Image.fromarray(img)
+        re_img.save(image_buffer, format="png")
+
+        image_buffer.seek(0)
+        string = base64.b64encode(image_buffer.read())
+        uri = 'data:image/png;base64,' + urllib.parse.quote(string)
+
+        return jsonify(uri)
+
 
 print(' ========== Load Detection Model START ========== ')
 load_model()

@@ -1,6 +1,7 @@
 import json
-import base64
+import base64, urllib
 import io
+import numpy as np
 import os
 
 from PIL import Image
@@ -11,6 +12,7 @@ def Image2Json(path):
         img = file.read()
 
     data = dict()
+    print(data)
     # data['image_data'] = base64.b64encode(img)
     data['image_data'] = base64.encodebytes(img).decode("utf-8")
 
@@ -35,7 +37,22 @@ def Json2Image(path):
     img = Image.open(io.BytesIO(img_file))
     img.save(os.path.join(save_dir, save_file))
 
+def ImageFromArray(path):
+    img = np.array(Image.open(path))
+
+    re_img = Image.fromarray(img)
+
+    buf = io.BytesIO()
+    re_img.save(buf, format="png")
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = 'data:image/png;base64,' + urllib.parse.quote(string)
+
+    print(uri)
+
 
 if __name__ == '__main__':
-    # Image2Json('./json_to_image_sample/42847.jpg')
-    Json2Image('./json_image.json')
+    # Image2Json('./42847.jpg')
+    # Json2Image('./json_image.json')
+    ImageFromArray('./42847.jpg')
+
