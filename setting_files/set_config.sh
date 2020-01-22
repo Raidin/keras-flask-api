@@ -15,7 +15,7 @@ sed "s/\[user_name\]/$USER_NAME/g" flaskapp.service.ori > flaskapp.service
 
 sed -i "s/\[path_to_project\]/\/home\/$USER_NAME\/keras-flask-api/g" flaskapp.service
 
-sed -i "s/\[path_to_virtualenv]/\/home\/$USER_NAME\/$ENV_NAME/g" flaskapp.service
+sed -i "s/\[path_to_virtualenv]/\/home\/$USER_NAME\/keras-flask-api\/$ENV_NAME/g" flaskapp.service
 
 sudo cp flaskapp.service /etc/systemd/system/
 rm flaskapp.service
