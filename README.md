@@ -25,9 +25,16 @@ Object Detection REST full API Using Keras + Flask + uWSGI + nginx
 
 ---
 ### How to Use
+* Install library
+  ```shell
+  $ cd [Path to project]
+  $ virtualenv [env_name] --python=python3.7
+  $ source [env_name]/bin/activate
+  $ pip install -r requirements.txt
+  ```
+
 * Install Flask, uWSGI, nginx 
   ```shell
-  $ virtualenv [env_name] --python=python3.7
   $ source [env_name]/bin/activate
   $ pip install Flask
   $ pip install uWSGI
